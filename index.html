@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <style>
+            @charset "utf-8";
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: sans-serif;
+                font-weight: 800;
+            }
+
+            body{
+                overflow: hidden   ;
+            }
+            h1{
+                position: absolute;
+                font-size: 200px;
+                animation: name 3s cubic-bezier(.46,1.02,.87,.03) forwards;
+                left: 100px;
+            }
+
+            .board {
+                display: grid;
+                grid-template-columns: repeat(3, 150px);
+                grid-template-rows: repeat(3, 150px);
+                gap: 10px;
+                transform: translate(-33%, 20%);
+                margin-left: 50%;
+                animation: spawning 1s  ease-in-out 3s forwards;
+                opacity: 0%;
+            }
+
+            .cell {
+                background-color: cadetblue;
+                font-size: 120px;
+                padding-left: 29px;
+                padding-bottom: 20px;
+                color: white;
+                box-shadow: 3px 3px 5px black;
+            }
+
+            footer{
+                position: absolute;
+                bottom: 0%;
+                width: 100vw;
+                text-align: center;
+                opacity: 0%;
+                
+                animation: spawning 1s  ease-in-out 3s forwards;
+            }
+
+            @keyframes name {
+                from{
+                    transform: translate(0%, -100vh);
+                }
+                to{
+                    transform: translate(0%, 90vh);
+                }
+
+                
+            }
+
+            @keyframes spawning {
+                    from{
+                        opacity: 0%;
+                    }
+                    to{
+                        opacity: 100%;
+                    }
+                }
+
+            
+        </style>
+        <link rel="iconcut icon" href="icon.png" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Jogo da Velha</title>
+    </head>
+
+    <body>
+        <h1>Jogo da Velha</h1>
+
+        <div class="board" id="board">
+            <div class="cell" onclick="cellClicked(0)"></div>
+            <div class="cell" onclick="cellClicked(1)"></div>
+            <div class="cell" onclick="cellClicked(2)"></div>
+            <div class="cell" onclick="cellClicked(3)"></div>
+            <div class="cell" onclick="cellClicked(4)"></div>
+            <div class="cell" onclick="cellClicked(5)"></div>
+            <div class="cell" onclick="cellClicked(6)"></div>
+            <div class="cell" onclick="cellClicked(7)"></div>
+            <div class="cell" onclick="cellClicked(8)"></div>
+        </div>
+
+        <footer><h4>Ricardo Müller Severo | 2024 &copy;</h4></footer>
+
+        <script>
+            let currentPlayer = 'X';
+            let board = ['', '', '', '', '', '', '', '', ''];
+
+            function cellClicked(index) {
+                if (board[index] === '') {
+                    board[index] = currentPlayer;
+                    document.getElementById('board').children[index].innerText =
+                        currentPlayer;
+                    setTimeout(checkWinner, 1);
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+
+            function checkWinner() {
+                const winConditions = [
+                    [0, 1, 2],
+                    [3, 4, 5],
+                    [6, 7, 8],
+                    [0, 3, 6],
+                    [1, 4, 7],
+                    [2, 5, 8],
+                    [0, 4, 8],
+                    [2, 4, 6],
+                ];
+                for (let condition of winConditions) {
+                    const [a, b, c] = condition;
+                    if (
+                        board[a] !== '' &&
+                        board[a] === board[b] &&
+                        board[a] === board[c]
+                    ) {
+                        alert(`JOGADOR ${board[a]} VENCEU!`);
+                        resetBoard();
+                        return;
+                    }
+                }
+                if (!board.includes('')) {
+                    alert('EMPATE!');
+                    resetBoard();
+                }
+            }
+
+            function resetBoard() {
+                currentPlayer = 'X';
+                board = ['', '', '', '', '', '', '', '', ''];
+                for (let i = 0; i < 9; i++) {
+                    document.getElementById('board').children[i].innerText = '';
+                }
+            }
+        </script>
+    </body>
+</html>
